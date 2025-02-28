@@ -211,15 +211,15 @@ body {
 
 .project-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
     margin-top: 20px;
 }
 
 .project-card {
     background: var(--surface);
     border-radius: 15px;
-    padding: 20px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -305,7 +305,7 @@ body {
 .manga-card {
     background: var(--surface);
     border-radius: 12px;
-    padding: 20px;
+    padding: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -316,7 +316,7 @@ body {
 
 .manga-cover {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 3/4;
     cursor: pointer;
     overflow: hidden;
     border-radius: 8px;
@@ -377,8 +377,8 @@ body {
 /* Estilos para la lista de libros */
 .book-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
     padding: 20px 0;
 }
 
