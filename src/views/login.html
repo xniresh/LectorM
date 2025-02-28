@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Lector Manga</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/auth.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <img src="/images/logo.png" alt="Lector Manga Logo">
+                <h1>Lector Manga</h1>
+                <p>Tu biblioteca de mangas online</p>
+            </div>
+            
+            <div class="auth-form">
+                <h2>Iniciar Sesión</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">
+                            <span class="material-icons">person</span>
+                        </label>
+                        <input type="text" id="username" name="username" placeholder="Nombre de usuario" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">
+                            <span class="material-icons">lock</span>
+                        </label>
+                        <input type="password" id="password" name="password" placeholder="Contraseña" required>
+                    </div>
+                    
+                    <div class="error-message" id="login-error"></div>
+                    
+                    <button type="submit" class="auth-button">Iniciar Sesión</button>
+                </form>
+                
+                <div class="auth-links">
+                    <a href="#" id="forgot-password">¿Olvidaste tu contraseña?</a>
+                    <span>o</span>
+                    <a href="/register">Registrarse</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/auth.js"></script>
+</body>
+</html>

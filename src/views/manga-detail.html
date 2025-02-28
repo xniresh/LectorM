@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Manga</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .manga-detail {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            background-color: var(--background);
+            color: var(--text);
+        }
+
+        .cover-section {
+            position: relative;
+        }
+
+        .cover-image {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .info-section {
+            padding: 20px;
+        }
+
+        .manga-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .metadata-section {
+            margin: 15px 0;
+            padding: 15px;
+            background: var(--surface);
+            border-radius: 8px;
+        }
+
+        .metadata-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 14px;
+        }
+
+        .edit-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .edit-form {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .edit-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .button-group button {
+            width: 100%;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            color: var(--text);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .button-group .read-button {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 215, 198, 0.3);
+        }
+
+        .button-group .info-button {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        [data-theme='dark'] .button-group .info-button {
+            background: #2d2d2d;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .button-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(76, 215, 198, 0.4);
+        }
+
+        .button-group .info-button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        [data-theme='dark'] .button-group .info-button:hover {
+            background: rgba(76, 215, 198, 0.1);
+        }
+
+        .info-button {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .info-button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Estilos del modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--background);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        .info-section h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .info-section p {
+            margin-bottom: 15px;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .info-section p:hover {
+            background-color: var(--surface);
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--surface);
+            color: var(--text);
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .add-tag-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .add-tag-form input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 16px;
+            font-size: 14px;
+            margin: 2px;
+        }
+
+        .tag button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 0 2px;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .tag-input {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .read-button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='/'">
+        <span class="material-icons">arrow_back</span> Volver
+    </button>
+    <div class="manga-detail">
+        <div class="cover-section">
+            <img id="coverImage" class="cover-image" src="" alt="Portada del manga">
+            <div class="button-group">
+                <button class="read-button" onclick="startReading()">Leer Manga</button>
+                <button class="info-button" onclick="toggleInfoModal()"><span class="material-icons">info</span> Información</button>
+            </div>
+            
+            <!-- Modal de información -->
+            <div id="infoModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Información del Manga</h2>
+                        <span class="close-modal" onclick="toggleInfoModal()">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="info-section">
+                            <h3>Título</h3>
+                            <p id="mangaTitle" onclick="toggleEdit('Title')"></p>
+                        </div>
+                        <div class="info-section">
+                            <h3>Artista</h3>
+                            <p id="mangaArtist" onclick="toggleEdit('Artist')"></p>
+                        </div>
+                        <div class="info-section">
+                            <h3>Descripción</h3>
+                            <p id="mangaDescription" onclick="toggleEdit('Description')"></p>
+                        </div>
+                        <div class="info-section">
+                            <h3>Categorías</h3>
+                            <div id="modalCategories" class="tag-list"></div>
+                            <div class="add-tag-form">
+                                <input type="text" id="genresInput" placeholder="Nueva categoría...">
+                                <button onclick="addTag('genres')">Agregar</button>
+                            </div>
+                        </div>
+                        <div class="info-section">
+                            <h3>Tags</h3>
+                            <div id="modalTags" class="tag-list"></div>
+                            <div class="add-tag-form">
+                                <input type="text" id="tagsInput" placeholder="Nuevo tag...">
+                                <button onclick="addTag('tags')">Agregar</button>
+                            </div>
+                        </div>
+                        <div class="info-section">
+                            <h3>Detalles</h3>
+                            <p><strong>Subido por:</strong> <span id="modalUploader"></span></p>
+                            <p><strong>Fecha de subida:</strong> <span id="modalUploadDate"></span></p>
+                            <p><strong>Última actualización:</strong> <span id="modalLastUpdate"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h1 id="mangaTitle" class="manga-title"></h1>
+            
+            <div class="metadata-section">
+                <div class="metadata-title">Artista</div>
+                <div id="artist"></div>
+                <button class="edit-button" onclick="toggleEdit('artist')">Editar</button>
+                <div class="edit-form" id="artistForm">
+                    <div class="form-group">
+                        <input type="text" id="artistInput">
+                        <button onclick="updateMetadata('artist')">Guardar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metadata-section">
+                <div class="metadata-title">Géneros</div>
+                <div id="genres" class="tag-list"></div>
+                <button class="edit-button" onclick="toggleEdit('genres')">Editar</button>
+                <div class="edit-form" id="genresForm">
+                    <div class="tag-input">
+                        <input type="text" id="genreInput" placeholder="Nuevo género">
+                        <button onclick="addTag('genre')">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metadata-section">
+                <div class="metadata-title">Tags</div>
+                <div id="tags" class="tag-list"></div>
+                <button class="edit-button" onclick="toggleEdit('tags')">Editar</button>
+                <div class="edit-form" id="tagsForm">
+                    <div class="tag-input">
+                        <input type="text" id="tagInput" placeholder="Nuevo tag">
+                        <button onclick="addTag('tag')">Agregar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metadata-section">
+                <div class="metadata-title">Subido por</div>
+                <div id="uploadedBy"></div>
+                <button class="edit-button" onclick="toggleEdit('uploadedBy')">Editar</button>
+                <div class="edit-form" id="uploadedByForm">
+                    <div class="form-group">
+                        <input type="text" id="uploadedByInput">
+                        <button onclick="updateMetadata('uploadedBy')">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentManga = null;
+        const mangaId = window.location.pathname.split('/manga/')[1];
+
+        async function loadMangaDetails() {
+            try {
+                const response = await fetch(`/api/mangas/${mangaId}`);
+                currentManga = await response.json();
+                
+                document.getElementById('mangaTitle').textContent = currentManga.title;
+                document.getElementById('artist').textContent = currentManga.artist;
+                document.getElementById('uploadedBy').textContent = currentManga.uploadedBy;
+                
+                // Cargar géneros
+                const genresContainer = document.getElementById('genres');
+                genresContainer.innerHTML = '';
+                currentManga.genres.forEach(genre => {
+                    const tag = document.createElement('span');
+                    tag.className = 'tag';
+                    tag.textContent = genre;
+                    tag.onclick = () => removeTag('genre', genre);
+                    genresContainer.appendChild(tag);
+                });
+
+                // Cargar tags
+                const tagsContainer = document.getElementById('tags');
+                tagsContainer.innerHTML = '';
+                currentManga.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'tag';
+                    tagElement.textContent = tag;
+                    tagElement.onclick = () => removeTag('tag', tag);
+                    tagsContainer.appendChild(tagElement);
+                });
+
+                // Cargar imagen de portada
+                document.getElementById('coverImage').src = currentManga.coverImage;
+            } catch (error) {
+                console.error('Error al cargar los detalles del manga:', error);
+            }
+        }
+
+        function toggleEdit(section) {
+            const form = document.getElementById(`${section}Form`);
+            form.classList.toggle('active');
+        }
+
+        async function updateMetadata(field) {
+            const value = document.getElementById(`${field}Input`).value;
+            if (!value) return;
+
+            try {
+                const response = await fetch(`/api/mangas/${mangaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ...currentManga,
+                        [field]: value
+                    })
+                });
+
+                if (response.ok) {
+                    loadMangaDetails();
+                    toggleEdit(field);
+                }
+            } catch (error) {
+                console.error(`Error al actualizar ${field}:`, error);
+            }
+        }
+
+        async function addTag(type) {
+            const input = document.getElementById(`${type}Input`);
+            const value = input.value.trim();
+            if (!value) return;
+
+            const field = type === 'genre' ? 'genres' : 'tags';
+            if (!currentManga[field].includes(value)) {
+                try {
+                    const response = await fetch(`/api/mangas/${mangaId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            ...currentManga,
+                            [field]: [...currentManga[field], value]
+                        })
+                    });
+
+                    if (response.ok) {
+                        input.value = '';
+                        loadMangaDetails();
+                    }
+                } catch (error) {
+                    console.error(`Error al agregar ${type}:`, error);
+                }
+            }
+        }
+
+        async function removeTag(type, value) {
+            const field = type === 'genre' ? 'genres' : 'tags';
+            try {
+                const response = await fetch(`/api/mangas/${mangaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ...currentManga,
+                        [field]: currentManga[field].filter(item => item !== value)
+                    })
+                });
+
+                if (response.ok) {
+                    loadMangaDetails();
+                }
+            } catch (error) {
+                console.error(`Error al eliminar ${type}:`, error);
+            }
+        }
+
+        function startReading() {
+            window.location.href = `/read/${mangaId}`;
+        }
+
+        // Cargar detalles al iniciar
+        loadMangaDetails();
+
+        // Cargar el tema guardado al iniciar
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        });
+    </script>
+</body>
+</html>

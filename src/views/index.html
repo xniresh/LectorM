@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MangaReader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="material-icons">menu_book</span>
+                <h1>MangaReader</h1>
+            </div>
+            
+            <nav class="categories">
+                <h2>Categorías</h2>
+                <ul>
+                    <li id="home-link">
+                        <span class="material-icons">home</span>
+                        <span>Home</span>
+                    </li>
+                    <li id="biblioteca-link">
+                        <span class="material-icons">book</span>
+                        <span>Mi Biblioteca</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">schedule</span>
+                        <span>Horarios</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="storage">
+                <h3>Mangas Disponibles</h3>
+                <div class="manga-count">
+                    <span class="material-icons">menu_book</span>
+                    <span id="manga-total">0</span>
+                </div>
+                <span>mangas en la biblioteca</span>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="search-bar">
+                    <span class="material-icons">search</span>
+                    <input type="text" placeholder="Buscar manga...">
+                </div>
+                <div class="user-profile">
+                    <div class="theme-switch-wrapper">
+                        <div id="theme-switch" class="theme-switch">
+                            <span class="switch-label active">Light</span>
+                            <span class="switch-label">Dark</span>
+                            <div class="switch-handle"></div>
+                        </div>
+                    </div>
+                    <div class="notifications">
+                        <span class="material-icons">notifications</span>
+                    </div>
+                    <div class="user-menu">
+                        <div class="avatar" id="user-avatar">
+                            <img src="https://cdn-icons-png.flaticon.com/512/10487/10487926.png" alt="Usuario">
+                        </div>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <div class="user-info">
+                                <span id="username-display">Usuario</span>
+                                <small id="email-display">usuario@example.com</small>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <span class="material-icons">person</span>
+                                Mi Perfil
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <span class="material-icons">favorite</span>
+                                Favoritos
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <span class="material-icons">history</span>
+                                Historial
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logout-button">
+                                <span class="material-icons">logout</span>
+                                Cerrar Sesión
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="projects">
+                <div class="section-header">
+                    <h2>Proyectos</h2>
+                    <a href="#" class="view-all">Ver todo</a>
+                </div>
+                <div class="project-grid">
+                    <div id="random-manga" class="project-card" style="display: none;">
+                        <span class="material-icons">description</span>
+                        <h3>Manga Recomendado</h3>
+                        <p>Actualizado al refrescar</p>
+                        <div class="random-manga-section">
+                            <div class="loading-indicator">
+                                <span>Cargando manga...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <span class="material-icons">description</span>
+                        <h3>Nuevo Manga</h3>
+                        <p>PDF | 12 Páginas</p>
+                        <button>Leer</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="popular-books">
+                <h2>Mangas populares</h2>
+                <div class="book-list">
+                    <!-- El contenido se cargará dinámicamente con JavaScript -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
