@@ -8,7 +8,7 @@
 </div>
 
 <p align="center">
-  LectorManga Logo
+  LectorManga
 </p>
 
 ## 📖 Descripción
