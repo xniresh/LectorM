@@ -61,6 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (themeToggle) {
         themeToggle.addEventListener('click', toggleTheme);
     }
+    
+    // Inicializar el menú colapsable
+    initCollapsibleMenu();
 });
 
 function showDefaultView() {
@@ -490,6 +493,7 @@ async function fetchUserInfo() {
 function updateUserInfo(user) {
     const usernameDisplay = document.getElementById('username-display');
     const emailDisplay = document.getElementById('email-display');
+    const sidebarUsername = document.getElementById('sidebar-username');
     
     if (usernameDisplay) {
         usernameDisplay.textContent = user.username;
@@ -497,6 +501,11 @@ function updateUserInfo(user) {
     
     if (emailDisplay) {
         emailDisplay.textContent = user.email;
+    }
+    
+    // Actualizar nombre de usuario en la barra lateral
+    if (sidebarUsername) {
+        sidebarUsername.textContent = user.username;
     }
 }
 
@@ -512,5 +521,25 @@ async function logout() {
         }
     } catch (error) {
         console.error('Error al cerrar sesión:', error);
+    }
+}
+
+// Función para inicializar el menú colapsable
+function initCollapsibleMenu() {
+    const collapseButton = document.getElementById('collapse-menu');
+    const sidebar = document.getElementById('sidebar');
+    
+    if (collapseButton && sidebar) {
+        // Comprobar si hay un estado guardado
+        const menuState = localStorage.getItem('menuCollapsed');
+        if (menuState === 'true') {
+            sidebar.classList.add('collapsed');
+        }
+        
+        collapseButton.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            // Guardar el estado del menú
+            localStorage.setItem('menuCollapsed', sidebar.classList.contains('collapsed'));
+        });
     }
 }

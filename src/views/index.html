@@ -36,7 +36,11 @@
 <body>
     <div class="container">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
+            <div class="collapse-button" id="collapse-menu">
+                <span class="material-icons">chevron_left</span>
+            </div>
+            
             <div class="logo">
                 <span class="material-icons">menu_book</span>
                 <h1>MangaReader</h1>
@@ -56,6 +60,10 @@
                     <li id="manga-counter-link">
                         <span class="material-icons">menu_book</span>
                         <span id="sidebar-manga-count">0 mangas</span>
+                    </li>
+                    <li id="user-info-link">
+                        <span class="material-icons">person</span>
+                        <span id="sidebar-username">Usuario</span>
                     </li>
                 </ul>
             </nav>
