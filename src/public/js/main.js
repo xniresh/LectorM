@@ -528,18 +528,54 @@ async function logout() {
 function initCollapsibleMenu() {
     const collapseButton = document.getElementById('collapse-menu');
     const sidebar = document.getElementById('sidebar');
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    
+    // Detectar si es un dispositivo móvil o tableta
+    const isMobile = window.matchMedia('(max-width: 1024px)').matches;
     
     if (collapseButton && sidebar) {
-        // Comprobar si hay un estado guardado
-        const menuState = localStorage.getItem('menuCollapsed');
-        if (menuState === 'true') {
-            sidebar.classList.add('collapsed');
+        // Diferente comportamiento para móviles y escritorio
+        if (isMobile) {
+            // En móviles, el menú se expande hacia abajo
+            collapseButton.addEventListener('click', () => {
+                sidebar.classList.toggle('expanded');
+                localStorage.setItem('menuExpanded', sidebar.classList.contains('expanded'));
+            });
+            
+            if (mobileMenuToggle) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('expanded');
+                    localStorage.setItem('menuExpanded', sidebar.classList.contains('expanded'));
+                });
+            }
+            
+            // Comprobar si hay un estado guardado para móvil
+            const menuState = localStorage.getItem('menuExpanded');
+            if (menuState === 'true') {
+                sidebar.classList.add('expanded');
+            }
+        } else {
+            // En escritorio, el menú se colapsa horizontalmente
+            collapseButton.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                localStorage.setItem('menuCollapsed', sidebar.classList.contains('collapsed'));
+            });
+            
+            // Comprobar si hay un estado guardado para escritorio
+            const menuState = localStorage.getItem('menuCollapsed');
+            if (menuState === 'true') {
+                sidebar.classList.add('collapsed');
+            }
         }
-        
-        collapseButton.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
-            // Guardar el estado del menú
-            localStorage.setItem('menuCollapsed', sidebar.classList.contains('collapsed'));
-        });
     }
+    
+    // Monitorear cambios en el tamaño de ventana
+    window.addEventListener('resize', debounce(() => {
+        const newIsMobile = window.matchMedia('(max-width: 1024px)').matches;
+        
+        // Si cambió entre móvil y escritorio, recargar para aplicar los estilos adecuados
+        if (newIsMobile !== isMobile) {
+            window.location.reload();
+        }
+    }, 250));
 }

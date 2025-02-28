@@ -1181,3 +1181,148 @@ button:hover,
     color: var(--text-secondary);
     font-size: 14px;
 }
+
+/* Media Queries para Dispositivos Móviles y Tabletas */
+@media (max-width: 1024px) {
+    .container {
+        display: block;
+    }
+    
+    .sidebar {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 70px;
+        flex-direction: row;
+        align-items: center;
+        padding: 0 20px;
+        z-index: 100;
+        border-right: none;
+        border-bottom: 1px solid rgba(230, 230, 230, 0.7);
+    }
+    
+    .sidebar.expanded {
+        height: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px 20px;
+        overflow-y: auto;
+    }
+    
+    .sidebar .collapse-button {
+        top: 23px;
+        right: 20px;
+        transform: rotate(90deg);
+    }
+    
+    .sidebar.expanded .collapse-button {
+        top: 20px;
+        right: 15px;
+        transform: rotate(-90deg);
+    }
+    
+    .logo {
+        margin-bottom: 0;
+        padding: 10px;
+    }
+    
+    .sidebar.expanded .logo {
+        margin-bottom: 30px;
+    }
+    
+    .categories {
+        display: none;
+    }
+    
+    .sidebar.expanded .categories {
+        display: block;
+        width: 100%;
+    }
+    
+    #user-info-link {
+        display: none;
+    }
+    
+    .sidebar.expanded #user-info-link {
+        display: flex;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        margin-top: 70px;
+        padding: 20px;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+        margin-right: 15px;
+        cursor: pointer;
+    }
+    
+    .mobile-menu-toggle .material-icons {
+        font-size: 24px;
+        color: var(--primary);
+    }
+    
+    /* Ajustes para sección de mangas */
+    .popular-books {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+    }
+    
+    .main-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    
+    .search-bar {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .popular-books {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+    }
+    
+    .card {
+        height: 230px;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .popular-books {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .card {
+        height: 200px;
+    }
+    
+    .card-title {
+        font-size: 0.9rem;
+    }
+    
+    .main-content {
+        padding: 15px;
+    }
+    
+    .pagination-button {
+        margin: 0 2px;
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* Esconder el botón de menú móvil en pantallas grandes */
+.mobile-menu-toggle {
+    display: none;
+}
