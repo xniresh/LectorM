@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Estado global para la paginación
+    window.paginationState = {
+        currentPage: 1,
+        itemsPerPage: 20,
+        totalItems: 0,
+        totalPages: 0
+    };
+
     fetchMangaList();
     fetchPopularMangas();
     // Desactivamos la función de manga aleatorio
@@ -40,22 +48,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mostrar vista por defecto
     showDefaultView();
 
-    // Manejar cambio de tema
-    const themeSwitch = document.getElementById('theme-switch');
-    themeSwitch.addEventListener('click', toggleTheme);
-
+    // Configuración del usuario
+    setupUserMenu();
+    
     // Cargar tema guardado
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
-    updateThemeSwitch(savedTheme);
-
-    // Estado global para la paginación
-    window.paginationState = {
-        currentPage: 1,
-        itemsPerPage: 20,
-        totalItems: 0,
-        totalPages: 0
-    };
+    updateThemeToggleIcons(savedTheme);
+    
+    // Manejar cambio de tema - Usar el nuevo ID 'theme-toggle'
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
 });
 
 function showDefaultView() {
@@ -277,11 +282,25 @@ function updatePagination() {
 function changePage(newPage) {
     window.paginationState.currentPage = newPage;
     updateMangaList(window.allMangas);
+    
+    // Desplazarse al inicio de la página
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
 
 function updateMangaCount(count) {
-    const mangaTotal = document.getElementById('manga-total');
-    mangaTotal.textContent = count;
+    const countElement = document.getElementById('manga-count-number');
+    if (countElement) {
+        countElement.textContent = count;
+    }
+    
+    // Actualizar también el contador en la barra lateral
+    const sidebarCountElement = document.getElementById('sidebar-manga-count');
+    if (sidebarCountElement) {
+        sidebarCountElement.textContent = `${count} mangas`;
+    }
 }
 
 function debounce(func, wait) {
@@ -345,17 +364,22 @@ function toggleTheme() {
     
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    updateThemeSwitch(newTheme);
+    updateThemeToggleIcons(newTheme);
 }
 
-function updateThemeSwitch(theme) {
-    const labels = document.querySelectorAll('.switch-label');
-    labels.forEach(label => {
-        const isLight = label.textContent.toLowerCase() === 'light';
-        label.classList.toggle('active', 
-            (theme === 'light' && isLight) || (theme === 'dark' && !isLight)
-        );
-    });
+function updateThemeToggleIcons(theme) {
+    const lightIcon = document.querySelector('.light-icon');
+    const darkIcon = document.querySelector('.dark-icon');
+    
+    if (!lightIcon || !darkIcon) return;
+    
+    if (theme === 'dark') {
+        lightIcon.classList.remove('active');
+        darkIcon.classList.add('active');
+    } else {
+        lightIcon.classList.add('active');
+        darkIcon.classList.remove('active');
+    }
 }
 
 function createMangaCard(manga) {

@@ -9,6 +9,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-right: 15px;
+        }
+        
+        .theme-toggle .material-icons {
+            color: var(--text-secondary);
+            padding: 5px;
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+        
+        .theme-toggle .active {
+            color: var(--primary);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -30,21 +53,13 @@
                         <span class="material-icons">book</span>
                         <span>Mi Biblioteca</span>
                     </li>
-                    <li>
-                        <span class="material-icons">schedule</span>
-                        <span>Horarios</span>
+                    <li id="manga-counter-link">
+                        <span class="material-icons">menu_book</span>
+                        <span id="sidebar-manga-count">0 mangas</span>
                     </li>
                 </ul>
             </nav>
 
-            <div class="storage">
-                <h3>Mangas Disponibles</h3>
-                <div class="manga-count">
-                    <span class="material-icons">menu_book</span>
-                    <span id="manga-total">0</span>
-                </div>
-                <span>mangas en la biblioteca</span>
-            </div>
         </aside>
 
         <!-- Main Content -->
@@ -55,12 +70,9 @@
                     <input type="text" placeholder="Buscar manga...">
                 </div>
                 <div class="user-profile">
-                    <div class="theme-switch-wrapper">
-                        <div id="theme-switch" class="theme-switch">
-                            <span class="switch-label active">Light</span>
-                            <span class="switch-label">Dark</span>
-                            <div class="switch-handle"></div>
-                        </div>
+                    <div class="theme-toggle" id="theme-toggle">
+                        <span class="material-icons light-icon active">light_mode</span>
+                        <span class="material-icons dark-icon">dark_mode</span>
                     </div>
                     <div class="notifications">
                         <span class="material-icons">notifications</span>

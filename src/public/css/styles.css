@@ -1010,3 +1010,45 @@ button:hover,
         transform: translateY(0);
     }
 }
+
+/* Estilos para el detalle del manga */
+.manga-detail {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.cover-section {
+    position: relative;
+}
+
+.cover-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    background-color: var(--surface);
+    display: block;
+    min-height: 320px;
+}
+
+/* Agregamos un indicador de carga para la imagen */
+.cover-image:not([src]), .cover-image[src=""] {
+    position: relative;
+    background-color: var(--background);
+    min-height: 420px;
+}
+
+.cover-image:not([src])::after, .cover-image[src=""]::after {
+    content: "Cargando...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-secondary);
+    font-size: 14px;
+}
