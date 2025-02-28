@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (forgotPasswordLink) {
         forgotPasswordLink.addEventListener('click', (e) => {
             e.preventDefault();
-            alert('Funcionalidad en desarrollo. Por favor, contacta al administrador.');
+            alert('This feature is under development. Please contact the administrator.');
         });
     }
     
@@ -57,24 +57,24 @@ function addNeumorphicEffects() {
     if (button) {
         // Efecto al pasar el mouse
         button.addEventListener('mouseenter', () => {
-            button.style.boxShadow = '8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light)';
+            button.style.boxShadow = '8px 8px 16px rgba(174, 174, 192, 0.4), -8px -8px 16px rgba(255, 255, 255, 0.8)';
         });
         
         // Efecto al quitar el mouse
         button.addEventListener('mouseleave', () => {
-            button.style.boxShadow = '6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light)';
+            button.style.boxShadow = '5px 5px 10px rgba(174, 174, 192, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7)';
         });
         
         // Efecto al hacer clic
         button.addEventListener('mousedown', () => {
-            button.style.boxShadow = 'inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light)';
-            button.style.transform = 'translateY(2px)';
+            button.style.boxShadow = 'inset 3px 3px 5px rgba(174, 174, 192, 0.3), inset -3px -3px 5px rgba(255, 255, 255, 0.7)';
+            button.style.transform = 'translateY(1px)';
         });
         
         // Efecto al soltar el clic
         button.addEventListener('mouseup', () => {
             setTimeout(() => {
-                button.style.boxShadow = '6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light)';
+                button.style.boxShadow = '5px 5px 10px rgba(174, 174, 192, 0.3), -5px -5px 10px rgba(255, 255, 255, 0.7)';
                 button.style.transform = 'translateY(0)';
             }, 150);
         });
@@ -91,7 +91,7 @@ async function handleLogin(e) {
     
     // Validación básica
     if (!username || !password) {
-        errorElement.textContent = 'Por favor, completa todos los campos';
+        errorElement.textContent = 'Please complete all fields';
         return;
     }
     
@@ -102,7 +102,7 @@ async function handleLogin(e) {
         // Mostrar efecto de carga en el botón
         const submitButton = document.querySelector('.auth-button');
         const originalText = submitButton.textContent;
-        submitButton.textContent = 'Iniciando sesión...';
+        submitButton.textContent = 'Logging in...';
         submitButton.disabled = true;
         submitButton.style.opacity = '0.8';
         
@@ -126,7 +126,7 @@ async function handleLogin(e) {
             window.location.href = '/';
         } else {
             // Error en el login
-            errorElement.textContent = data.message || 'Credenciales inválidas';
+            errorElement.textContent = data.message || 'Invalid credentials';
             
             // Restaurar el botón
             submitButton.textContent = originalText;
@@ -141,12 +141,12 @@ async function handleLogin(e) {
             }, 500);
         }
     } catch (error) {
-        console.error('Error al iniciar sesión:', error);
-        errorElement.textContent = 'Error de conexión. Inténtalo de nuevo.';
+        console.error('Error during login:', error);
+        errorElement.textContent = 'Connection error. Please try again.';
         
         // Restaurar el botón
         const submitButton = document.querySelector('.auth-button');
-        submitButton.textContent = 'Iniciar Sesión';
+        submitButton.textContent = 'Login';
         submitButton.disabled = false;
         submitButton.style.opacity = '1';
     }
@@ -164,17 +164,17 @@ async function handleRegister(e) {
     
     // Validación básica
     if (!username || !email || !password || !confirmPassword) {
-        errorElement.textContent = 'Por favor, completa todos los campos';
+        errorElement.textContent = 'Please complete all fields';
         return;
     }
     
     if (password !== confirmPassword) {
-        errorElement.textContent = 'Las contraseñas no coinciden';
+        errorElement.textContent = 'Passwords do not match';
         return;
     }
     
     if (password.length < 6) {
-        errorElement.textContent = 'La contraseña debe tener al menos 6 caracteres';
+        errorElement.textContent = 'Password must be at least 6 characters long';
         return;
     }
     
@@ -185,7 +185,7 @@ async function handleRegister(e) {
         // Mostrar efecto de carga en el botón
         const submitButton = document.querySelector('.auth-button');
         const originalText = submitButton.textContent;
-        submitButton.textContent = 'Registrando...';
+        submitButton.textContent = 'Registering...';
         submitButton.disabled = true;
         submitButton.style.opacity = '0.8';
         
@@ -209,7 +209,7 @@ async function handleRegister(e) {
             window.location.href = '/';
         } else {
             // Error en el registro
-            errorElement.textContent = data.message || 'Error al registrarse';
+            errorElement.textContent = data.message || 'Error during registration';
             
             // Restaurar el botón
             submitButton.textContent = originalText;
@@ -224,12 +224,12 @@ async function handleRegister(e) {
             }, 500);
         }
     } catch (error) {
-        console.error('Error al registrarse:', error);
-        errorElement.textContent = 'Error de conexión. Inténtalo de nuevo.';
+        console.error('Error during registration:', error);
+        errorElement.textContent = 'Connection error. Please try again.';
         
         // Restaurar el botón
         const submitButton = document.querySelector('.auth-button');
-        submitButton.textContent = 'Registrarse';
+        submitButton.textContent = 'Register';
         submitButton.disabled = false;
         submitButton.style.opacity = '1';
     }
@@ -260,7 +260,7 @@ async function checkAuthStatus() {
             }
         }
     } catch (error) {
-        console.error('Error al verificar estado de autenticación:', error);
+        console.error('Error during authentication check:', error);
     }
 }
 
@@ -268,7 +268,7 @@ async function checkAuthStatus() {
 function updateUIForAuthenticatedUser(user) {
     // Esta función se puede implementar para actualizar elementos de la UI
     // cuando el usuario está autenticado, como mostrar su nombre, etc.
-    console.log('Usuario autenticado:', user);
+    console.log('User authenticated:', user);
 }
 
 // Función para cerrar sesión
@@ -282,6 +282,6 @@ async function logout() {
             window.location.href = '/login';
         }
     } catch (error) {
-        console.error('Error al cerrar sesión:', error);
+        console.error('Error during logout:', error);
     }
 }
