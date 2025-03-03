@@ -9,8 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchMangaList();
     fetchPopularMangas();
-    // Desactivamos la función de manga aleatorio
-    // fetchRandomManga();
     fetchUserInfo();
     
     const searchInput = document.querySelector('.search-bar input');
@@ -32,8 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         bibliotecaLink.classList.add('active');
         
-        // Ocultar sección de proyectos y mostrar todos los mangas
-        document.querySelector('.projects').style.display = 'none';
+        // Mostrar todos los mangas
         document.querySelector('.popular-books').style.display = 'block';
         document.querySelector('.popular-books h2').textContent = 'Mi Biblioteca';
         
@@ -67,8 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function showDefaultView() {
-    // Mostrar proyectos y mangas populares
-    document.querySelector('.projects').style.display = 'block';
+    // Mostrar mangas populares
     document.querySelector('.popular-books').style.display = 'block';
     document.querySelector('.popular-books h2').textContent = 'Mangas populares';
     
@@ -106,15 +102,7 @@ async function fetchMangaList() {
     }
 }
 
-async function fetchRandomManga() {
-    try {
-        const response = await fetch('/api/mangas/random');
-        const manga = await response.json();
-        updateRandomManga(manga);
-    } catch (error) {
-        console.error('Error al cargar manga aleatorio:', error);
-    }
-}
+
 
 function updatePopularMangasList(mangas) {
     const popularSection = document.querySelector('.popular-section .book-list');
@@ -175,100 +163,50 @@ function updateMangaList(mangas) {
     }, 300);
 }
 
-function updateRandomManga(manga) {
-    if (!manga) {
-        console.log("No se encontró ningún manga para mostrar");
-        return;
-    }
-    
-    const randomMangaSection = document.querySelector('.random-manga-section');
-    if (!randomMangaSection) return;
 
-    randomMangaSection.innerHTML = '';
-    
-    const coverImage = manga.coverImage || manga.firstPage || '/images/default-cover.jpg';
-    
-    const mangaCard = document.createElement('div');
-    mangaCard.classList.add('manga-card');
-    
-    const mangaCover = document.createElement('div');
-    mangaCover.classList.add('manga-cover');
-    mangaCover.onclick = () => window.location.href = `/manga/${manga._id}`;
-    
-    const mangaImage = document.createElement('img');
-    mangaImage.src = coverImage;
-    mangaImage.alt = manga.title || 'Manga sin título';
-    mangaImage.onerror = () => mangaImage.src = '/images/default-cover.jpg';
-    
-    mangaCover.appendChild(mangaImage);
-    
-    const mangaInfo = document.createElement('div');
-    mangaInfo.classList.add('manga-info');
-    
-    const mangaTitle = document.createElement('h3');
-    mangaTitle.textContent = manga.title || 'Manga sin título';
-    mangaTitle.onclick = () => window.location.href = `/manga/${manga._id}`;
-    
-    const mangaArtist = document.createElement('p');
-    mangaArtist.textContent = manga.artist || 'Artista desconocido';
-    
-    const mangaActions = document.createElement('div');
-    mangaActions.classList.add('manga-actions');
-    
-    const readButton = document.createElement('button');
-    readButton.classList.add('read-button');
-    readButton.textContent = 'Leer';
-    readButton.onclick = (event) => {
-        event.stopPropagation();
-        window.location.href = `/read/${manga._id}`;
-    };
-    
-    mangaActions.appendChild(readButton);
-    
-    mangaInfo.appendChild(mangaTitle);
-    mangaInfo.appendChild(mangaArtist);
-    mangaInfo.appendChild(mangaActions);
-    
-    mangaCard.appendChild(mangaCover);
-    mangaCard.appendChild(mangaInfo);
-    
-    randomMangaSection.appendChild(mangaCard);
-    
-    // Actualizar el título del proyecto
-    const projectTitle = document.querySelector('#random-manga h3');
-    if (projectTitle) {
-        projectTitle.textContent = 'Manga Recomendado';
-    }
-    
-    // Actualizar la descripción
-    const projectDesc = document.querySelector('#random-manga p');
-    if (projectDesc) {
-        projectDesc.textContent = 'Actualizado al refrescar';
-    }
-}
 
 function updatePagination() {
     const { currentPage, totalPages, totalItems, itemsPerPage } = window.paginationState;
     const start = (currentPage - 1) * itemsPerPage + 1;
     const end = Math.min(currentPage * itemsPerPage, totalItems);
     
+    // Crear botones de números de página
+    let pageNumbersHTML = '';
+    
+    // Determinar qué páginas mostrar (máximo 5 páginas)
+    let startPage = Math.max(1, currentPage - 2);
+    let endPage = Math.min(totalPages, startPage + 4);
+    
+    // Ajustar si estamos cerca del final
+    if (endPage - startPage < 4 && startPage > 1) {
+        startPage = Math.max(1, endPage - 4);
+    }
+    
+    // Generar botones de número de página
+    for (let i = startPage; i <= endPage; i++) {
+        pageNumbersHTML += `<button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+    }
+    
     const paginationHTML = `
         <div class="pagination">
-            <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>
-                <span class="material-icons">first_page</span>
-            </button>
-            <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-                <span class="material-icons">chevron_left</span>
-            </button>
-            <span class="page-info">
+            <div class="pagination-controls">
+                <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>
+                    <span class="material-icons">first_page</span>
+                </button>
+                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    <span class="material-icons">chevron_left</span>
+                </button>
+                ${pageNumbersHTML}
+                <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <span class="material-icons">chevron_right</span>
+                </button>
+                <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <span class="material-icons">last_page</span>
+                </button>
+            </div>
+            <div class="page-info">
                 ${start}-${end} de ${totalItems} mangas
-            </span>
-            <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-                <span class="material-icons">chevron_right</span>
-            </button>
-            <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>
-                <span class="material-icons">last_page</span>
-            </button>
+            </div>
         </div>
     `;
     
@@ -340,10 +278,7 @@ async function handleSearch(event) {
     }
 }
 
-function handleAddProject() {
-    // Implementar lógica para añadir nuevo proyecto
-    console.log('Añadir nuevo proyecto');
-}
+
 
 async function downloadManga(mangaId) {
     try {

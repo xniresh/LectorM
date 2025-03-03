@@ -1,12 +1,9 @@
-version: '3.8'
 services:
   app:
     build: .
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
-      - /app/node_modules
       - /home/dev/Documents/Manga:/app/Manga:ro
     environment:
       - NODE_ENV=development

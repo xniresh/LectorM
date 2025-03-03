@@ -29,9 +29,12 @@ async function loadMangaImages(mangaId) {
         // Limpiar el contenedor
         reader.innerHTML = '';
 
-        // Crear un contenedor para todas las imágenes
+        // Crear un contenedor para todas las imágenes con ancho adaptativo
         const imagesContainer = document.createElement('div');
         imagesContainer.className = 'images-container';
+        
+        // Asegurarnos de que las imágenes respeten el ancho máximo del contenedor
+        imagesContainer.style.width = '100%';
 
         // Cargar cada imagen
         for (const [index, imagePath] of data.images.entries()) {
@@ -43,6 +46,8 @@ async function loadMangaImages(mangaId) {
             img.className = 'manga-image';
             img.loading = 'lazy';
             img.dataset.page = index + 1;
+            // Asegurar que la imagen se ajuste al ancho del contenedor
+            img.style.maxWidth = '100%';
 
             // Agregar eventos para manejo de carga y errores
             img.onerror = () => {
@@ -69,19 +74,6 @@ async function loadMangaImages(mangaId) {
 
         reader.appendChild(imagesContainer);
 
-        // Agregar controles de navegación
-        const nav = document.createElement('div');
-        nav.className = 'reader-nav';
-        nav.innerHTML = `
-            <button class="nav-button prev" onclick="scrollToPreviousImage()">
-                <span class="material-icons">arrow_upward</span>
-            </button>
-            <button class="nav-button next" onclick="scrollToNextImage()">
-                <span class="material-icons">arrow_downward</span>
-            </button>
-        `;
-        document.body.appendChild(nav);
-
     } catch (error) {
         console.error('Error:', error);
         reader.innerHTML = `
@@ -93,50 +85,53 @@ async function loadMangaImages(mangaId) {
     }
 }
 
-// Funciones de navegación
-function scrollToPreviousImage() {
-    const images = document.querySelectorAll('.image-container');
-    for (let i = images.length - 1; i >= 0; i--) {
-        const img = images[i];
-        const rect = img.getBoundingClientRect();
-        if (rect.top < 0) {
-            img.scrollIntoView({ behavior: 'smooth' });
-            break;
-        }
+// Inicializar la funcionalidad de cambio de tema
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM cargado - inicializando tema');
+    
+    // Cargar tema guardado
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    
+    // Actualizar los iconos del toggle
+    updateThemeToggleIcons(savedTheme);
+    
+    // Manejar cambio de tema
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        console.log('Botón de tema encontrado, añadiendo evento click');
+        themeToggle.addEventListener('click', toggleTheme);
+    } else {
+        console.log('Error: Botón de tema no encontrado');
     }
+});
+
+function toggleTheme() {
+    console.log('Cambiando tema');
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeToggleIcons(newTheme);
 }
 
-function scrollToNextImage() {
-    const images = document.querySelectorAll('.image-container');
-    for (const img of images) {
-        const rect = img.getBoundingClientRect();
-        if (rect.top > 0) {
-            img.scrollIntoView({ behavior: 'smooth' });
-            break;
-        }
+function updateThemeToggleIcons(theme) {
+    console.log('Actualizando iconos para tema:', theme);
+    const lightIcon = document.querySelector('.theme-toggle .light-icon');
+    const darkIcon = document.querySelector('.theme-toggle .dark-icon');
+    
+    if (!lightIcon || !darkIcon) {
+        console.log('Error: No se encontraron los iconos de tema');
+        return;
     }
-}
-
-// Funciones de navegación
-function scrollToPreviousImage() {
-    const images = document.querySelectorAll('.image-container');
-    for (let i = images.length - 1; i >= 0; i--) {
-        const img = images[i];
-        const rect = img.getBoundingClientRect();
-        if (rect.top < 0) {
-            img.scrollIntoView({ behavior: 'smooth' });
-            break;
-        }
+    
+    if (theme === 'dark') {
+        lightIcon.classList.remove('active');
+        darkIcon.classList.add('active');
+    } else {
+        lightIcon.classList.add('active');
+        darkIcon.classList.remove('active');
     }
-}
-
-function scrollToNextImage() {
-    const images = document.querySelectorAll('.image-container');
-    for (const img of images) {
-        const rect = img.getBoundingClientRect();
-        if (rect.top > 0) {
-            img.scrollIntoView({ behavior: 'smooth' });
-            break;
-        }
-    }
+    console.log('Iconos actualizados');
 }
