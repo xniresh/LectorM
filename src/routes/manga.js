@@ -199,4 +199,104 @@ router.get('/random', async (req, res) => {
     }
 });
 
+// Añadir un género
+router.post('/:mangaId/genres', async (req, res) => {
+    try {
+        const { value } = req.body;
+        const mangaId = req.params.mangaId;
+        
+        if (!value) {
+            return res.status(400).json({ error: 'El valor del género es requerido' });
+        }
+        
+        const manga = await Manga.findByIdAndUpdate(
+            mangaId,
+            { $addToSet: { genres: value } },
+            { new: true }
+        );
+        
+        if (!manga) {
+            return res.status(404).json({ error: 'Manga no encontrado' });
+        }
+        
+        res.json(manga);
+    } catch (error) {
+        console.error('Error al añadir género:', error);
+        res.status(500).json({ error: 'Error al añadir género' });
+    }
+});
+
+// Eliminar un género
+router.delete('/:mangaId/genres/:value', async (req, res) => {
+    try {
+        const mangaId = req.params.mangaId;
+        const value = req.params.value;
+        
+        const manga = await Manga.findByIdAndUpdate(
+            mangaId,
+            { $pull: { genres: value } },
+            { new: true }
+        );
+        
+        if (!manga) {
+            return res.status(404).json({ error: 'Manga no encontrado' });
+        }
+        
+        res.json(manga);
+    } catch (error) {
+        console.error('Error al eliminar género:', error);
+        res.status(500).json({ error: 'Error al eliminar género' });
+    }
+});
+
+// Añadir un tag
+router.post('/:mangaId/tags', async (req, res) => {
+    try {
+        const { value } = req.body;
+        const mangaId = req.params.mangaId;
+        
+        if (!value) {
+            return res.status(400).json({ error: 'El valor del tag es requerido' });
+        }
+        
+        const manga = await Manga.findByIdAndUpdate(
+            mangaId,
+            { $addToSet: { tags: value } },
+            { new: true }
+        );
+        
+        if (!manga) {
+            return res.status(404).json({ error: 'Manga no encontrado' });
+        }
+        
+        res.json(manga);
+    } catch (error) {
+        console.error('Error al añadir tag:', error);
+        res.status(500).json({ error: 'Error al añadir tag' });
+    }
+});
+
+// Eliminar un tag
+router.delete('/:mangaId/tags/:value', async (req, res) => {
+    try {
+        const mangaId = req.params.mangaId;
+        const value = req.params.value;
+        
+        const manga = await Manga.findByIdAndUpdate(
+            mangaId,
+            { $pull: { tags: value } },
+            { new: true }
+        );
+        
+        if (!manga) {
+            return res.status(404).json({ error: 'Manga no encontrado' });
+        }
+        
+        res.json(manga);
+    } catch (error) {
+        console.error('Error al eliminar tag:', error);
+        res.status(500).json({ error: 'Error al eliminar tag' });
+    }
+});
+
 module.exports = router; 

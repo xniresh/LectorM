@@ -4,7 +4,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - /home/dev/Documents/Manga:/app/Manga:ro
+      - /home/devcode/mangas-temp:/app/Manga:ro
     environment:
       - NODE_ENV=development
       - MONGODB_URI=mongodb://mongodb:27017/mangadb
