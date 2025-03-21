@@ -93,10 +93,60 @@ En el archivo `docker-compose.yml` se configuran las siguientes rutas de almacen
 
 ```yaml
 volumes:
-  - /home/user/Documents/Manga:/app/Manga:ro  # Ruta donde se almacenan los mangas
-  - /home/user/Documents/MongoDB:/data/db     # Ruta donde se almacena la base de datos
+  - /home/user/mangas-temp:/app/Manga:ro  # Ruta donde se almacenan los mangas
 ```
+```yaml
 
+services:
+  app:
+    image: xlokius/lector_manga:latest
+    container_name: lector_manga_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - /home/user/mangas-temp:/app/Manga:ro
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/mangadb
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    command: npm run dev
+    networks:
+      - lector_manga_network
+
+
+  mongodb:
+    image: mongo:latest
+    container_name: lector_manga_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=mangadb
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+        - lector_manga_network
+
+
+
+volumes:
+  mongodb_data:
+
+
+
+networks:
+  lector_manga_network:
+    driver: bridge
+
+
+```
 **⚠️ Importante**: Debes cambiar estas rutas por directorios que existan en tu sistema. Por ejemplo:
 
 - En Linux/Mac: `/ruta/a/tu/carpeta/Manga` y `/ruta/a/tu/carpeta/MongoDB`
